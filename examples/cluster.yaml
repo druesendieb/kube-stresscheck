@@ -29,8 +29,9 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: kube-stresscheck
+  namespace: kube-system
 ---
-apiVersion: extensions/v1beta1
+apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
   name: kube-stresscheck-psp
@@ -49,14 +50,16 @@ spec:
   - 'secret'
 ---
 kind: DaemonSet
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: kube-stresscheck
   namespace: kube-system
   labels:
     app: kube-stresscheck
 spec:
-  replicas: 1
+  selector:
+    matchLabels:
+      app: kube-stresscheck
   template:
     metadata:
       labels:
